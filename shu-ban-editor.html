@@ -134,8 +134,8 @@
             position: absolute;
             object-fit: cover;
             pointer-events: none;
-            border: 2px solid rgba(200,200,200,0.6);
-            border-radius: 4px;
+            border: 3px solid #666;
+            border-radius: 12px;
         }
         .placeholder {
             position: absolute;
@@ -464,8 +464,9 @@
                     var img = new Image();
                     img.onload = function() {
                         ctx.save();
+                        // 裁剪区域（圆角矩形）
                         ctx.beginPath();
-                        ctx.roundRect(pos.left, pos.top, pos.width, pos.height, 8);
+                        ctx.roundRect(pos.left, pos.top, pos.width, pos.height, 24);
                         ctx.clip();
                         var photoScale = photo.scale / 100;
                         var baseScale = Math.max(pos.width / img.width, pos.height / img.height);
@@ -476,6 +477,14 @@
                         ctx.translate(drawX + imgWidth/2, drawY + imgHeight/2);
                         ctx.rotate(photo.rotate * Math.PI / 180);
                         ctx.drawImage(img, -imgWidth/2, -imgHeight/2, imgWidth, imgHeight);
+                        ctx.restore();
+                        // 绘制边框
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.roundRect(pos.left, pos.top, pos.width, pos.height, 24);
+                        ctx.strokeStyle = '#666666';
+                        ctx.lineWidth = 9;
+                        ctx.stroke();
                         ctx.restore();
                         loadedCount++;
                         checkDone();
