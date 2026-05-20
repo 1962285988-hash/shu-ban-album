@@ -110,15 +110,26 @@
         .photo-slot {
             position: absolute;
             background: rgba(255,255,255,0.08);
-            border: 2px dashed rgba(233,69,96,0.5);
+            border: 2px solid rgba(233,69,96,0.7);
             border-radius: 6px;
             cursor: pointer;
             overflow: hidden;
             transition: all 0.3s;
         }
+        .photo-slot::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px solid rgba(233,69,96,0.8);
+            border-radius: 6px;
+            pointer-events: none;
+            z-index: 10;
+        }
         .photo-slot:hover { border-color: #e94560; }
+        .photo-slot:hover::after { border-color: #e94560; }
         .photo-slot.selected { border-color: #e94560; box-shadow: 0 0 15px rgba(233,69,96,0.5); }
-        .photo-slot.filled { border-style: solid; border-color: rgba(255,255,255,0.4); }
+        .photo-slot.selected::after { border-color: #e94560; }
+        .photo-slot.filled { border-style: solid; border-color: rgba(233,69,96,0.7); }
         .photo-slot img {
             position: absolute;
             object-fit: cover;
