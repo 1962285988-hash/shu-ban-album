@@ -90,7 +90,7 @@
         .canvas-container {
             position: relative;
             width: 460px;
-            height: 800px;
+            height: 460px;
             background: white;
             border-radius: 8px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
@@ -98,11 +98,12 @@
         }
         .template-canvas {
             position: relative;
-            width: 460px;
-            height: 800px;
-            background-size: cover;
+            width: 100%;
+            height: 100%;
+            background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
+            background-color: white;
         }
         .photo-slot {
             position: absolute;
@@ -180,7 +181,7 @@
             .canvas-container {
                 width: calc(100vw - 20px);
                 height: auto;
-                aspect-ratio: 460 / 800;
+                aspect-ratio: 1 / 1;
             }
             .template-canvas {
                 width: 100%;
@@ -202,6 +203,7 @@
             .header h1 { font-size: 20px; }
             .btn { padding: 10px 18px; font-size: 14px; }
             .placeholder { font-size: 32px; }
+            .canvas-container { width: 600px; height: 600px; }
         }
     </style>
 </head>
@@ -244,24 +246,25 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // 坐标基于 460x800 竖版画布，4行3列
+        // 坐标基于正方形画布（对应底图 3992x3992），4行3列
+        // 按比例从原 460x800 坐标重算到 460x460
         const slotPositions = [
             // 第一行：一月 二月 三月
-            { left: 28,  top: 38,  width: 116, height: 156 },
-            { left: 172, top: 38,  width: 116, height: 156 },
-            { left: 316, top: 38,  width: 116, height: 156 },
+            { left: 28,  top: 22,  width: 116, height: 90 },
+            { left: 172, top: 22,  width: 116, height: 90 },
+            { left: 316, top: 22,  width: 116, height: 90 },
             // 第二行：四月 五月 六月
-            { left: 28,  top: 226, width: 116, height: 156 },
-            { left: 172, top: 226, width: 116, height: 156 },
-            { left: 316, top: 226, width: 116, height: 156 },
+            { left: 28,  top: 130, width: 116, height: 90 },
+            { left: 172, top: 130, width: 116, height: 90 },
+            { left: 316, top: 130, width: 116, height: 90 },
             // 第三行：七月 八月 九月
-            { left: 28,  top: 414, width: 116, height: 156 },
-            { left: 172, top: 414, width: 116, height: 156 },
-            { left: 316, top: 414, width: 116, height: 156 },
+            { left: 28,  top: 238, width: 116, height: 90 },
+            { left: 172, top: 238, width: 116, height: 90 },
+            { left: 316, top: 238, width: 116, height: 90 },
             // 第四行：十月 十一月 十二月
-            { left: 28,  top: 602, width: 116, height: 156 },
-            { left: 172, top: 602, width: 116, height: 156 },
-            { left: 316, top: 602, width: 116, height: 156 }
+            { left: 28,  top: 346, width: 116, height: 90 },
+            { left: 172, top: 346, width: 116, height: 90 },
+            { left: 316, top: 346, width: 116, height: 90 }
         ];
 
         let uploadedPhotos = [];
@@ -284,12 +287,13 @@
         function fixMobileScale() {
             const container = document.querySelector('.canvas-container');
             if (!container) return;
-            if (window.innerWidth > 899) {
-                container.style.width = '460px';
-                container.style.height = '800px';
-            } else {
+            // 画布始终正方形，按屏幕宽度自适应
+            if (window.innerWidth <= 899) {
                 container.style.width = '';
                 container.style.height = '';
+            } else {
+                container.style.width = '600px';
+                container.style.height = '600px';
             }
         }
 
@@ -448,7 +452,7 @@
             var ctx = canvas.getContext('2d');
             var originalW = 3992;
             var originalH = 3992;
-            var scaleFactor = originalW / 460;
+            var scaleFactor = originalW / canvas.width;
             canvas.width = originalW;
             canvas.height = originalH;
 
